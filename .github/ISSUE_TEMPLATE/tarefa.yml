@@ -1,0 +1,63 @@
+name: Tarefa
+description: Uma tarefa pequena (meio dia a um dia), em um único módulo.
+title: "[MODULO-N] "
+labels: ["tarefa"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Só vai para **Pronto para pegar** a tarefa com arquivos e critério de aceite preenchidos.
+  - type: dropdown
+    id: modulo
+    attributes:
+      label: Módulo
+      options: [auth, cursos, ia, atividades, envios, frontend, importador, infra]
+    validations:
+      required: true
+  - type: textarea
+    id: objetivo
+    attributes:
+      label: Objetivo
+      description: O que precisa existir quando a tarefa terminar.
+    validations:
+      required: true
+  - type: textarea
+    id: arquivos
+    attributes:
+      label: Arquivos que podem ser alterados
+      description: Só estes. Precisou de outro? Avise no cartão antes.
+      placeholder: |
+        backend/app/modules/auth/service.py
+        backend/tests/test_auth_service.py
+    validations:
+      required: true
+  - type: input
+    id: depende
+    attributes:
+      label: Depende de
+      placeholder: "#12, #13 (ou —)"
+  - type: textarea
+    id: aceite
+    attributes:
+      label: Critério de aceite
+      description: Uma linha por item. Cada item precisa ser verificável.
+      placeholder: |
+        - [ ] Senha certa passa na verificação
+        - [ ] Senha errada falha
+        - [ ] Dois hashes da mesma senha são diferentes
+    validations:
+      required: true
+  - type: textarea
+    id: teste
+    attributes:
+      label: Teste que prova
+      placeholder: backend/tests/test_auth_service.py
+    validations:
+      required: true
+  - type: dropdown
+    id: tamanho
+    attributes:
+      label: Tamanho
+      options: ["P (até meio dia)", "M (um dia)"]
+    validations:
+      required: true

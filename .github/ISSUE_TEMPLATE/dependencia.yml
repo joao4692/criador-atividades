@@ -1,0 +1,36 @@
+name: Pedido de dependência
+description: Pedir uma biblioteca nova. Só o líder adiciona ao projeto.
+title: "[DEP] "
+labels: ["dependencia"]
+body:
+  - type: input
+    id: nome
+    attributes:
+      label: Biblioteca e versão
+      placeholder: "bcrypt 4.3.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: onde
+    attributes:
+      label: Onde
+      options: [backend, frontend, importador]
+    validations:
+      required: true
+  - type: textarea
+    id: para_que
+    attributes:
+      label: Para que serve
+    validations:
+      required: true
+  - type: textarea
+    id: alternativa
+    attributes:
+      label: Por que a biblioteca padrão ou uma dependência que já existe não resolve
+    validations:
+      required: true
+  - type: input
+    id: tarefa
+    attributes:
+      label: Tarefa que precisa dela
+      placeholder: "#15"

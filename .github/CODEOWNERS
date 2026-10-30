@@ -1,0 +1,20 @@
+# Quem precisa aprovar mudanças em cada parte do projeto.
+# Formato: <padrão de arquivo>  <@usuário>. Se várias linhas combinarem, vale a ÚLTIMA.
+
+# Padrão: o líder revisa tudo.
+*                               @joao4692
+
+# Arquivos compartilhados: listados à parte para deixar a regra explícita.
+# Se um dia alguém virar revisor dos módulos, estes continuam só com o líder.
+/backend/app/main.py            @joao4692
+/backend/app/core/              @joao4692
+/backend/app/migrations/        @joao4692
+/backend/requirements*          @joao4692
+/backend/pyproject.toml         @joao4692
+/backend/Dockerfile             @joao4692
+/frontend/package.json          @joao4692
+/frontend/package-lock.json     @joao4692
+/frontend/Dockerfile            @joao4692
+/docker-compose*.yml            @joao4692
+/scripts/                       @joao4692
+/.github/                       @joao4692
