@@ -1,0 +1,8 @@
+# Usado SÓ pela automação (GitHub Actions), por cima do docker-compose.yml:
+#   docker compose -f docker-compose.yml -f docker-compose.ci.yml ...
+# Remove os volumes de código: testa exatamente o que foi construído na imagem.
+services:
+  backend:
+    volumes: !reset []
+  frontend:
+    volumes: !reset []

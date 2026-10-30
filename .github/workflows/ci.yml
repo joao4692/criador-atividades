@@ -1,0 +1,110 @@
+# Automação que roda em todo Pull Request para a main (e em cada push na main).
+# Cada "job" aparece no PR como uma verificação com ✅ ou ❌.
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+# Se a pessoa enviar outro commit, cancela a execução antiga do mesmo PR.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+# O robô só precisa LER o código.
+permissions:
+  contents: read
+
+env:
+  COMPOSE: docker compose -f docker-compose.yml -f docker-compose.ci.yml
+
+jobs:
+  # ---------------------------------------------------------------- backend
+  backend:
+    name: backend
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v5
+
+      - name: Criar .env de teste (valores fictícios)
+        run: cp .env.example .env
+
+      - name: Construir a imagem do zero
+        run: $COMPOSE build --no-cache --pull backend
+
+      - name: Linter (ruff)
+        run: $COMPOSE run --rm backend sh -c "ruff check . && ruff format --check ."
+
+      - name: Migrações (alembic upgrade head)
+        run: $COMPOSE run --rm backend alembic upgrade head
+
+      - name: Testes (pytest)
+        run: $COMPOSE run --rm backend pytest
+
+      - name: Desligar tudo
+        if: always()
+        run: $COMPOSE down -v
+
+  # --------------------------------------------------------------- frontend
+  frontend:
+    name: frontend
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v5
+
+      - name: Criar .env de teste
+        run: cp .env.example .env
+
+      - name: Construir a imagem do zero
+        run: $COMPOSE build --no-cache --pull frontend
+
+      - name: Linter (eslint)
+        run: $COMPOSE run --rm --no-deps frontend npm run lint
+
+      - name: Build (TypeScript + Vite)
+        run: $COMPOSE run --rm --no-deps frontend npm run build
+
+  # ------------------------------------------------------- regras do PR
+  governanca:
+    name: governanca
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Nome da branch segue o padrão
+        env:
+          BRANCH: ${{ github.head_ref }}
+        run: |
+          padrao='^(feat|fix|docs|chore|refactor|test)/[a-z0-9]+-[0-9]+(-[a-z0-9-]+)?$'
+          if [[ ! "$BRANCH" =~ $padrao ]]; then
+            echo "::error::Branch '$BRANCH' fora do padrão. Exemplo: feat/auth-3-hash-senha"
+            exit 1
+          fi
+          echo "Branch OK: $BRANCH"
+
+      - name: PR cita uma Issue (Closes #N)
+        env:
+          BODY: ${{ github.event.pull_request.body }}
+        run: |
+          if ! grep -Eqi '(closes|fixes|resolves) #[0-9]+' <<< "$BODY"; then
+            echo "::error::O PR precisa citar a Issue na descrição, por exemplo: Closes #12"
+            exit 1
+          fi
+          echo "Issue citada."
+
+      - name: Tamanho do PR (só aviso)
+        env:
+          ADICOES: ${{ github.event.pull_request.additions }}
+          REMOCOES: ${{ github.event.pull_request.deletions }}
+        run: |
+          total=$((ADICOES + REMOCOES))
+          echo "Linhas alteradas: $total"
+          if [ "$total" -gt 300 ]; then
+            echo "::warning::PR com $total linhas. O combinado é até ~300; considere dividir."
+          fi

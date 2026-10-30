@@ -18,6 +18,7 @@ RUN groupadd --system --gid ${APP_UID} app \
  && useradd --system --uid ${APP_UID} --gid app --home-dir /app --shell /usr/sbin/nologin app
 
 WORKDIR /app
+RUN chown app:app /app
 
 # Primeiro só o lock: o Docker reaproveita esta camada enquanto ele não mudar.
 # --require-hashes: cada pacote precisa bater com o hash. --no-deps: nada fora do lock.
