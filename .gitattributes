@@ -1,0 +1,6 @@
+# Finais de linha LF, mesmo para quem edita no Windows (evita "\r: command not found").
+* text=auto eol=lf
+*.ps1 text eol=crlf
+*.pdf binary
+*.png binary
+*.jpg binary

@@ -1,0 +1,6 @@
+# Ferramentas de DESENVOLVIMENTO. Só o líder edita.
+-c requirements.lock
+
+pytest>=9.2,<10
+httpx2>=2.16,<3
+ruff>=0.17,<0.18
