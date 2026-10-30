@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Bloqueia push direto na main. Instale uma vez com: ./scripts/instalar-hooks.sh
+# Combinado da equipe: tudo entra na main por Pull Request.
+while read -r _local_ref _local_sha remote_ref _remote_sha; do
+  if [ "$remote_ref" = "refs/heads/main" ]; then
+    echo "" >&2
+    echo "✋ Push direto na main bloqueado. Use uma branch e abra um PR:" >&2
+    echo "   git switch -c feat/modulo-N-descricao" >&2
+    echo "   git push -u origin HEAD" >&2
+    echo "" >&2
+    exit 1
+  fi
+done
+exit 0

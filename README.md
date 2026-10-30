@@ -10,8 +10,10 @@ Você só precisa de **Docker Desktop** (ou Docker Engine no Linux) e **Git**. N
 
 ```bash
 git clone <url-do-repositorio>
-cd criador-atividades
+cd criador-
 cp .env.example .env
+./scripts/instalar-hooks.sh
+
 ```
 
 No Linux, ajuste o `APP_UID` no `.env` para o resultado de `id -u`. No Windows, se a recarga automática não funcionar, use `WATCH_POLLING=true`.
@@ -20,11 +22,11 @@ No Linux, ajuste o `APP_UID` no `.env` para o resultado de `id -u`. No Windows, 
 docker compose up --build
 ```
 
-| O quê | Endereço |
-|---|---|
-| Frontend | http://localhost:5173 |
-| API | http://localhost:8000 |
-| Documentação da API | http://localhost:8000/docs |
+| O quê                   | Endereço                                  |
+| ----------------------- | ----------------------------------------- |
+| Frontend                | http://localhost:5173                     |
+| API                     | http://localhost:8000                     |
+| Documentação da API     | http://localhost:8000/docs                |
 | Saúde da API / do banco | http://localhost:8000/health · /health/db |
 
 ## Comandos do dia a dia
@@ -61,5 +63,5 @@ No Windows, rode os scripts pelo **Git Bash** (vem com o Git).
 ## Dependências recusadas
 
 | Biblioteca | Motivo | Data |
-|---|---|---|
-| — | — | — |
+| ---------- | ------ | ---- |
+| —          | —      | —    |
