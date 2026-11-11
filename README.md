@@ -43,6 +43,7 @@ No Windows, rode os scripts pelo **Git Bash** (vem com o Git).
 ## Como trabalhamos
 
 Primeira tarefa? Leia o guia passo a passo: [Como fazer uma tarefa](docs/como-fazer-uma-tarefa.md).
+O plano das sprints e como ajustá-lo: [Planejamento das sprints](docs/planejamento-das-sprints.md).
 
 1. Pegue um cartão em **Pronto Pra Pegar** no quadro do GitHub Projects, atribua a você e mova para **Em Andamento**.
 2. `git switch develop && git pull`
