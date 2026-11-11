@@ -22,7 +22,7 @@ Três regras valem sempre:
 
 1. **Uma tarefa por vez.** Termine a sua antes de pegar outra.
 2. **Mexa só nos arquivos listados no cartão.** Precisou de outro? Pergunte no cartão antes.
-3. **Ninguém envia código direto para a `develop` nem para a `main`.** Tudo entra por Pull Request (PR).
+3. **Ninguém envia código direto para a `develop` nem para a `main`.** Tudo entra por Pull Request (PR). O GitHub recusa o `git push` direto nessas duas branches.
 
 ## Palavras que você vai encontrar
 
@@ -241,6 +241,18 @@ Ou o nome da branch está fora do padrão, ou falta o `Closes #N` na descrição
 
 **"Adicionei o `.env` sem querer."**
 Se ainda não fez push: `git restore --staged .env`. Se já enviou, avise o líder **na hora**: a senha ou a chave que estava lá precisa ser trocada.
+
+**"O `git push` foi recusado com `GH013: Repository rule violations`."**
+Você tentou enviar direto para a `develop` ou para a `main`, e a regra de proteção barrou. Nada foi perdido: o commit continua na sua máquina. Leve ele para uma branch de tarefa e deixe a `develop` local igual à do GitHub:
+
+```bash
+git switch -c feat/auth-3-hash-senha
+git branch -f develop origin/develop
+git push -u origin feat/auth-3-hash-senha
+```
+
+**"O `git push` foi recusado com `GH013` e a mensagem fala em `secret`."**
+O GitHub encontrou uma chave ou senha no que você tentou enviar. Não force o envio. Tire a chave do arquivo, coloque no `.env` e avise o líder: se a chave é de verdade, ela precisa ser trocada.
 
 **"Preciso mexer em um arquivo que não está no cartão."**
 Pare e comente no cartão. Pode ser que outra pessoa esteja mexendo nele, ou que seja um arquivo que só o líder altera (`main.py`, `core/`, migrações, dependências, Docker).
