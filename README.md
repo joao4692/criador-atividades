@@ -42,12 +42,14 @@ No Windows, rode os scripts pelo **Git Bash** (vem com o Git).
 
 ## Como trabalhamos
 
-1. Pegue um cartão em **Pronto para pegar** no quadro do GitHub Projects, atribua a você e mova para **Em andamento**.
+Primeira tarefa? Leia o guia passo a passo: [Como fazer uma tarefa](docs/como-fazer-uma-tarefa.md).
+
+1. Pegue um cartão em **Pronto Pra Pegar** no quadro do GitHub Projects, atribua a você e mova para **Em Andamento**.
 2. `git switch develop && git pull`
 3. Crie a branch com o ID da tarefa: `feat/auth-3-hash-senha`, `fix/...`, `docs/...`
 4. Mexa **só nos arquivos da tarefa** (um módulo por tarefa). Commits pequenos: `feat(auth): adiciona hash de senha`
 5. Rode `./scripts/dev.sh check` antes de enviar.
-6. Abra o PR contra a `develop`, preencha o modelo e cite a Issue (`Closes #12`). Mova o cartão para **Em revisão**.
+6. Abra o PR contra a `develop`, preencha o modelo e cite a Issue (`Closes #12`). O cartão vai para **Em Revisão**.
 7. Depois do merge, volte para a `develop` e atualize antes de pegar a próxima tarefa.
 
 ### Regras
