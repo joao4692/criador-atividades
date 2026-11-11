@@ -43,16 +43,17 @@ No Windows, rode os scripts pelo **Git Bash** (vem com o Git).
 ## Como trabalhamos
 
 1. Pegue um cartão em **Pronto para pegar** no quadro do GitHub Projects, atribua a você e mova para **Em andamento**.
-2. `git switch main && git pull`
+2. `git switch develop && git pull`
 3. Crie a branch com o ID da tarefa: `feat/auth-3-hash-senha`, `fix/...`, `docs/...`
 4. Mexa **só nos arquivos da tarefa** (um módulo por tarefa). Commits pequenos: `feat(auth): adiciona hash de senha`
 5. Rode `./scripts/dev.sh check` antes de enviar.
-6. Abra o PR contra a `main`, preencha o modelo e cite a Issue (`Closes #12`). Mova o cartão para **Em revisão**.
-7. Depois do merge, volte para a `main` e atualize antes de pegar a próxima tarefa.
+6. Abra o PR contra a `develop`, preencha o modelo e cite a Issue (`Closes #12`). Mova o cartão para **Em revisão**.
+7. Depois do merge, volte para a `develop` e atualize antes de pegar a próxima tarefa.
 
 ### Regras
 
-- Ninguém faz push direto na `main`. Tudo entra por PR, com aprovação do líder, testes e linter passando, e **Squash and merge**.
+- Ninguém faz push direto na `develop` nem na `main`. Tudo entra por PR, com aprovação do líder, testes e linter passando, e **Squash and merge**.
+- A `develop` é a branch do dia a dia. A `main` é a versão estável: só recebe código da `develop`, em um PR aberto pelo líder.
 - `app/main.py`, `app/core/`, `docker-compose.yml`, Dockerfiles, dependências e migrações só mudam com o líder.
 - **Dependência nova:** abra uma Issue com o modelo "Pedido de dependência". Não instale nem edite `requirements*` ou `package*.json`.
 - **Migrações:** uma pessoa por vez, combinado no quadro.

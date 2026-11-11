@@ -1,12 +1,17 @@
-# Automação que roda em todo Pull Request para a main (e em cada push na main).
+# Automação que roda em todo Pull Request para a develop ou para a main
+# (e em cada push nessas duas branches).
 # Cada "job" aparece no PR como uma verificação com ✅ ou ❌.
+#
+# Fluxo:  branch da tarefa --PR--> develop --PR--> main
+#   - PR para a develop: testes + regras da tarefa (nome da branch, Issue citada).
+#   - PR para a main:    testes + regra "só a develop entra na main".
 name: CI
 
 on:
   pull_request:
-    branches: [main]
+    branches: [develop, main]
   push:
-    branches: [main]
+    branches: [develop, main]
 
 # Se a pessoa enviar outro commit, cancela a execução antiga do mesmo PR.
 concurrency:
@@ -77,7 +82,21 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
+      # --- PR para a main: só vale se vier da develop -------------------
+      - name: A main só recebe código da develop
+        if: github.base_ref == 'main'
+        env:
+          BRANCH: ${{ github.head_ref }}
+        run: |
+          if [ "$BRANCH" != "develop" ]; then
+            echo "::error::PR para a main só pode vir da develop. Abra o PR contra a develop."
+            exit 1
+          fi
+          echo "Promoção da develop para a main."
+
+      # --- PR para a develop: regras da tarefa --------------------------
       - name: Nome da branch segue o padrão
+        if: github.base_ref == 'develop'
         env:
           BRANCH: ${{ github.head_ref }}
         run: |
@@ -89,6 +108,7 @@ jobs:
           echo "Branch OK: $BRANCH"
 
       - name: PR cita uma Issue (Closes #N)
+        if: github.base_ref == 'develop'
         env:
           BODY: ${{ github.event.pull_request.body }}
         run: |
@@ -99,6 +119,7 @@ jobs:
           echo "Issue citada."
 
       - name: Tamanho do PR (só aviso)
+        if: github.base_ref == 'develop'
         env:
           ADICOES: ${{ github.event.pull_request.additions }}
           REMOCOES: ${{ github.event.pull_request.deletions }}
