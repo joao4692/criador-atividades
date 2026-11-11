@@ -55,12 +55,31 @@ O plano das sprints e como ajustá-lo: [Planejamento das sprints](docs/planejame
 
 ### Regras
 
-- Ninguém faz push direto na `develop` nem na `main`. Tudo entra por PR, com aprovação do líder, testes e linter passando, e **Squash and merge**.
-- A `develop` é a branch do dia a dia. A `main` é a versão estável: só recebe código da `develop`, em um PR aberto pelo líder.
+- Ninguém faz push direto na `develop` nem na `main`: o GitHub recusa. Tudo entra por PR, com as três verificações verdes e a revisão do líder.
+- A `develop` é a branch do dia a dia. O PR de uma tarefa entra nela com **Squash and merge**.
+- A `main` é a versão estável: só recebe código da `develop`, em um PR aberto pelo líder, com **Create a merge commit**.
 - `app/main.py`, `app/core/`, `docker-compose.yml`, Dockerfiles, dependências e migrações só mudam com o líder.
 - **Dependência nova:** abra uma Issue com o modelo "Pedido de dependência". Não instale nem edite `requirements*` ou `package*.json`.
 - **Migrações:** uma pessoa por vez, combinado no quadro.
 - **Segredos:** nunca no código. A chave do Grok fica só no seu `.env`.
+
+## Proteções do repositório
+
+O repositório é público. O que o mantém seguro são estas camadas:
+
+| Camada | O que garante |
+|---|---|
+| `.env` fora do Git | A senha do banco e a chave do Grok nunca entram no repositório. Só o `.env.example`, com valores fictícios, é versionado |
+| Varredura de segredos (secret scanning) | O GitHub avisa se uma chave conhecida aparecer no código ou no histórico |
+| Bloqueio de envio (push protection) | O GitHub recusa o `git push` que contém uma chave |
+| Regra `proteger-develop` | A `develop` só recebe código por PR, com `backend`, `frontend` e `governanca` verdes, em squash |
+| Regra `proteger-main` | A `main` só recebe código por PR, com as mesmas verificações, em merge commit. A `governanca` reprova PR que não venha da `develop` |
+
+As duas regras também impedem apagar a branch e reescrever o histórico dela, e valem para todos, inclusive o líder. Elas ficam em **Settings → Rules → Rulesets**.
+
+**Por que squash na `develop` e merge commit na `main`:** o squash junta os commits da tarefa em um só, o que deixa a `develop` com uma linha por tarefa. Na promoção para a `main`, o squash criaria um commit que não existe na `develop`, e as duas branches passariam a divergir. O merge commit leva os commits da `develop` como estão.
+
+**Se uma chave vazar mesmo assim:** troque a chave no serviço de origem na hora (gerar outra e invalidar a antiga). Apagar o commit não resolve, porque a chave já pode ter sido copiada.
 
 ## Dependências recusadas
 
